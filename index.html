@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pseudocode Logic Lab v1.10</title>
+    <script src="https://cdn.jsdelivr.net"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --accent: #007acc;
+            --accent-glow: rgba(0, 122, 204, 0.4);
+            --glass: rgba(30, 30, 30, 0.85);
+            --success: #4caf50;
+            --error: #f44336;
+            --text: #e0e0e0;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+            color: var(--text);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-track { height: 6px; background: #222; width: 100%; position: absolute; top: 0; left: 0; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--accent); }
+
+        .status-bar {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        #scenario-title { margin-top: 0; font-weight: 300; letter-spacing: -0.5px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
+
+        .code-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-card:hover:not(.locked) {
+            border-color: var(--accent);
+            background: #161616;
+            transform: translateY(-2px);
+        }
+
+        .code-card.correct { border-color: var(--success); background: rgba(76, 175, 80, 0.1); box-shadow: 0 0 15px rgba(76, 175, 80, 0.2); }
+        .code-card.incorrect { border-color: var(--error); background: rgba(244, 67, 54, 0.1); }
+        .code-card.missed { border-color: var(--success); opacity: 0.7; }
+
+        #hint-box {
+            padding: 15px; border-radius: 6px;
+            background: #1a1a1a; border-left: 4px solid var(--accent);
+            visibility: hidden; opacity: 0; transform: translateY(10px); transition: 0.3s;
+        }
+        #hint-box.visible { visibility: visible; opacity: 1; transform: translateY(0); }
+
+        .btn-supreme {
+            background: var(--accent); color: white; border: none; padding: 16px;
+            border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer;
+            margin-top: 20px; transition: 0.3s; text-transform: uppercase;
+        }
+        .btn-supreme:hover { filter: brightness(1.2); box-shadow: 0 0 20px var(--accent-glow); }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <div class="progress-track"><div id="p-bar" class="progress-fill"></div></div>
+        
+        <div id="quiz-view">
+            <div class="status-bar" id="progress-text">Session active // node.01</div>
+            <h2 id="scenario-title">Initializing Systems...</h2>
+            <div id="options-container" class="options-grid"></div>
+            <div id="hint-box"></div>
+            <button id="next-btn" class="btn-supreme" style="display: none;">Continue [Enter]</button>
+        </div>
+
+        <div id="report-view" style="display: none; text-align: center;">
+            <p>OPTIMISATION COMPLETE</p>
+            <h1 style="font-size: 4rem; margin: 10px 0;">RANK: <span id="rank-text" style="color: var(--accent)">-</span></h1>
+            <p id="performance-summary">Learning Centre Quiz Processed Successfully.</p>
+            <button onclick="location.reload()" class="btn-supreme">Reboot Session</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+    { title: "Scenario 1: Variable Assignment", options: ["SET x = 10", "x ← 10", "x := 10", "10 → x"], correct: 1, hint: "Pseudocode standard uses the assignment arrow (←)." },
+    { title: "Scenario 2: Selection Structure (IF)", options: ["IF age > 18\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 THEN\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 DO\n  OUTPUT 'Adult'", "WHEN age > 18:\n  OUTPUT 'Adult'"], correct: 1, hint: "Formal notation requires 'THEN' and 'ENDIF'." },
+    { title: "Scenario 3: Definite Iteration (FOR)", options: ["FOR i = 1 to 10\n  OUTPUT i\nNEXT i", "FOR i FROM 1 TO 10\n  OUTPUT i", "WHILE i < 10\n  OUTPUT i\nENDWHILE", "LOOP 10 TIMES\n  OUTPUT i"], correct: 0, hint: "Definite loops require a counter and 'NEXT'." },
+    { title: "Scenario 4: Array Indexing", options: ["names.get(0)", "names{1}", "names[0]", "names.index(0)"], correct: 2, hint: "Square brackets [ ] are the industry standard." },
+    { title: "Scenario 5: Boolean Logic (AND)", options: ["IF x > 0 && x < 10", "IF x > 0 AND x < 10 THEN", "IF x > 0 & x < 10", "IF (x > 0 + x < 10)"], correct: 1, hint: "Use keywords (AND/OR) for clarity in pseudocode." }
+];
+
+let state = { currentIndex: 0, score: 0, canAnswer: true };
+
+const ui = {
+    title: document.getElementById('scenario-title'),
+    container: document.getElementById('options-container'),
+    hint: document.getElementById('hint-box'),
+    next: document.getElementById('next-btn'),
+    progress: document.getElementById('p-bar'),
+    progText: document.getElementById('progress-text'),
+    quizView: document.getElementById('quiz-view'),
+    reportView: document.getElementById('report-view'),
+    rankText: document.getElementById('rank-text')
+};
+
+// INITIALIZATION SUBPROGRAM
+function init() { 
+    state.canAnswer = true;
+    const data = quizData[state.currentIndex];
+
+    ui.title.innerText = data.title;
+    // FIXED: Using backticks for template literals
+    ui.progText.innerText = `Scenario Question 0${state.currentIndex + 1} // ${quizData.length}`;
+    ui.container.innerHTML = '';
+    ui.next.style.display = 'none';
+    ui.hint.classList.remove('visible');
+    
+    // FIXED: Calculation for progress bar
+    ui.progress.style.width = `${(state.currentIndex / quizData.length) * 100}%`;
+
+    data.options.forEach((opt, i) => {
+        const card = document.createElement('div');
+        card.className = 'code-card';
+        card.innerText = opt;
+        // PARAMETER PASSING: i and card are passed to handleChoice
+        card.onclick = () => handleChoice(i, card);
+        ui.container.appendChild(card);
+    });
+}
+
+// VALIDATION SUBPROGRAM (Required for Part B)
+function handleChoice(index, element) {
+    if (!state.canAnswer) return;
+    state.canAnswer = false;
+
+    const correctIndex = quizData[state.currentIndex].correct;
+    
+    if (index === correctIndex) {
+        element.classList.add('correct');
+        state.score++;
+    } else {
+        element.classList.add('incorrect');
+        ui.container.children[correctIndex].classList.add('missed');
+    }
+
+    ui.hint.innerText = quizData[state.currentIndex].hint;
+    ui.hint.classList.add('visible');
+    ui.next.style.display = 'block';
+}
+
+// NAVIGATION LOGIC
+ui.next.onclick = () => {
+    state.currentIndex++;
+    if (state.currentIndex < quizData.length) {
+        init();
+    } else {
+        showReport();
+    }
+};
+
+function showReport() {
+    ui.quizView.style.display = 'none';
+    ui.reportView.style.display = 'block';
+    ui.progress.style.width = '100%';
+    
+    // CALCULATED RANK
+    const percent = (state.score / quizData.length) * 100;
+    ui.rankText.innerText = percent === 100 ? "S-TIER" : percent >= 80 ? "A" : "B";
+}
+
+// Start the app
+init();
+
+    </script>
+</body>
+</html>
