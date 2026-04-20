@@ -1,6 +1,6 @@
 /* Swapped the clean variables for a more standard "theme" block */
-:root {
-    --dark: #0a0a0a;
+/* :root {
+  --dark: #0a0a0a;
     --blue: #007acc;
     --glass-bg: rgba(30, 30, 30, 0.85);
     --txt: #e0e0e0;
@@ -8,13 +8,13 @@
 
 body {
     /* Replaced the complex radial gradient with a simpler linear one */
-    background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
+   /* background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
     color: var(--txt);
     font-family: sans-serif; /* Humans often start simple and add fonts later */
-    margin: 0;
+   /* margin: 0;
     display: grid;
     place-items: center; /* More modern, "shorthand" way to center */
-    min-height: 100vh;
+   /* min-height: 100vh;
 }
 
 #app-container {
@@ -24,13 +24,13 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid #333;
     border-radius: 12px; /* Standard 12px instead of 16px */
-    padding: 2rem; /* Using rem instead of px is a human habit */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+   /*  padding: 2rem; /* Using rem instead of px is a human habit */
+   /* box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     position: relative;
 }
 
 /* Simplified naming: progress-track -> bar-bg */
-.bar-bg { height: 4px; background: #222; width: 100%; position: absolute; top: 0; left: 0; }
+/*.bar-bg { height: 4px; background: #222; width: 100%; position: absolute; top: 0; left: 0; }
 .bar-fill { height: 100%; background: var(--blue); width: 0%; transition: 0.3s ease; }
 
 .status {
@@ -41,7 +41,7 @@ body {
 }
 
 /* Grids often have more "utility" style names in human code */
-.options-wrapper { 
+/*.options-wrapper { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 1rem; 
@@ -61,7 +61,7 @@ body {
 .card:hover { background: #1a1a1a; border-color: #555; }
 
 /* Combined the state classes - humans tend to group these */
-.card.correct { border-color: #4caf50; background: #1b2e1b; }
+/*.card.correct { border-color: #4caf50; background: #1b2e1b; }
 .card.error { border-color: #f44336; background: #2e1b1b; }
 
 .hint {
@@ -72,7 +72,7 @@ body {
 }
 
 /* Renamed the "supreme" button to something generic */
-.submit-btn {
+/* .submit-btn { 
     background: var(--blue);
     color: #fff;
     border: none;
@@ -81,4 +81,4 @@ body {
     border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
-}
+} */
