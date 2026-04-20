@@ -125,14 +125,29 @@ ui.next.onclick = () => {
 };
 
 function showReport() {
-    ui.quizView.style.display = 'none';
-    ui.reportView.style.display = 'block';
-    ui.progress.style.width = '100%';
-    
-    // CALCULATED RANK
-    const percent = (state.score / quizData.length) * 100;
-    ui.rankText.innerText = percent === 100 ? "S-TIER" : percent >= 80 ? "A" : "B";
+  const { quizView, reportView, progress, rankText } = ui;
+  const { score } = state;
+  const total = quizData.length;
+
+  // UI Updates
+  quizView.style.display = 'none';
+  reportView.style.display = 'block';
+  progress.style.width = '100%';
+
+  // Calculate Rank
+  const percent = (score / total) * 100;
+  
+  // 5-Grade Scale Logic
+  let grade;
+  if (percent === 100) grade = "S-TIER";
+  else if (percent >= 80) grade = "A";
+  else if (percent >= 60) grade = "B";
+  else if (percent >= 40) grade = "C";
+  else grade = "F";
+
+  rankText.innerText = grade;
 }
+
 
 // Start the app
 init();
