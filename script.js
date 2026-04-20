@@ -1,66 +1,66 @@
 // A human would probably just list these out instead of using a "UI object"
-const title = document.getElementById('scenario-title');
-const container = document.getElementById('options-container');
-const hintBox = document.getElementById('hint-box');
-const nextBtn = document.getElementById('next-btn');
-const progressBar = document.getElementById('p-bar');
-const progressText = document.getElementById('progress-text');
+// const title = document.getElementById('scenario-title');
+// const container = document.getElementById('options-container');
+// const hintBox = document.getElementById('hint-box');
+// const nextBtn = document.getElementById('next-btn');
+// const progressBar = document.getElementById('p-bar');
+// const progressText = document.getElementById('progress-text');
 
 // Shorter, less "robotic" quiz data
-const myQuiz = [
-    { q: "Scenario 1: Variable Assignment", options: ["SET x = 10", "x ← 10", "x := 10", "10 → x"], ans: 1, hint: "Pseudocode usually uses the arrow (←)." },
-    { q: "Scenario 2: Selection Structure (IF)", options: ["IF age > 18\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 THEN\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 DO\n  OUTPUT 'Adult'", "WHEN age > 18:\n  OUTPUT 'Adult'"], ans: 1, hint: "You need 'THEN' and 'ENDIF' for this one." },
-    { q: "Scenario 3: Definite Iteration (FOR)", options: ["FOR i = 1 to 10\n  OUTPUT i\nNEXT i", "FOR i FROM 1 TO 10\n  OUTPUT i", "WHILE i < 10\n  OUTPUT i\nENDWHILE", "LOOP 10 TIMES\n  OUTPUT i"], ans: 0, hint: "FOR loops usually need 'NEXT' at the end." },
-    { q: "Scenario 4: Array Indexing", options: ["names.get(0)", "names{1}", "names[0]", "names.index(0)"], ans: 2, hint: "Square brackets [] are standard." },
-    { q: "Scenario 5: Boolean Logic (AND)", options: ["IF x > 0 && x < 10", "IF x > 0 AND x < 10 THEN", "IF x > 0 & x < 10", "IF (x > 0 + x < 10)"], ans: 1, hint: "Use 'AND' for pseudocode clarity." }
-];
+// const myQuiz = [
+  //   { q: "Scenario 1: Variable Assignment", options: ["SET x = 10", "x ← 10", "x := 10", "10 → x"], ans: 1, hint: "Pseudocode usually uses the arrow (←)." },
+   //  { q: "Scenario 2: Selection Structure (IF)", options: ["IF age > 18\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 THEN\n  OUTPUT 'Adult'\nENDIF", "IF age > 18 DO\n  OUTPUT 'Adult'", "WHEN age > 18:\n  OUTPUT 'Adult'"], ans: 1, hint: "You need 'THEN' and 'ENDIF' for this one." },
+   //  { q: "Scenario 3: Definite Iteration (FOR)", options: ["FOR i = 1 to 10\n  OUTPUT i\nNEXT i", "FOR i FROM 1 TO 10\n  OUTPUT i", "WHILE i < 10\n  OUTPUT i\nENDWHILE", "LOOP 10 TIMES\n  OUTPUT i"], ans: 0, hint: "FOR loops usually need 'NEXT' at the end." },
+    // { q: "Scenario 4: Array Indexing", options: ["names.get(0)", "names{1}", "names[0]", "names.index(0)"], ans: 2, hint: "Square brackets [] are standard." },
+   //  { q: "Scenario 5: Boolean Logic (AND)", options: ["IF x > 0 && x < 10", "IF x > 0 AND x < 10 THEN", "IF x > 0 & x < 10", "IF (x > 0 + x < 10)"], ans: 1, hint: "Use 'AND' for pseudocode clarity." }
+// ];
 
-let currentQ = 0;
-let score = 0;
-let locked = false; // "locked" is a more common human name than "canAnswer"
+// let currentQ = 0;
+// let score = 0;
+// let locked = false; // "locked" is a more common human name than "canAnswer"
 
-function loadQuestion() {
-    locked = false;
-    let data = myQuiz[currentQ];
+// function loadQuestion() {
+   //  locked = false;
+   //  let data = myQuiz[currentQ];
 
-    title.textContent = data.q;
+   //  title.textContent = data.q;
     // Removed the "Scenario Question 01 // 5" AI formatting for something simpler
-    progressText.innerHTML = "Question " + (currentQ + 1) + " of " + myQuiz.length;
+   //  progressText.innerHTML = "Question " + (currentQ + 1) + " of " + myQuiz.length;
     
-    container.innerHTML = '';
-    nextBtn.style.display = 'none';
-    hintBox.style.display = 'none'; // Humans often use display none/block
+    // container.innerHTML = '';
+    // nextBtn.style.display = 'none';
+    // hintBox.style.display = 'none'; // Humans often use display none/block
     
     // Simple percentage calculation
-    let progress = (currentQ / myQuiz.length) * 100;
-    progressBar.style.width = progress + "%";
+    // let progress = (currentQ / myQuiz.length) * 100;
+    // progressBar.style.width = progress + "%"; 
 
     // Standard for loop instead of forEach is common for students/solo devs
-    for (let i = 0; i < data.options.length; i++) {
-        let btn = document.createElement('div');
-        btn.className = 'code-card';
-        btn.innerText = data.options[i];
+    // for (let i = 0; i < data.options.length; i++) {
+        // let btn = document.createElement('div');
+        // btn.className = 'code-card';
+        // btn.innerText = data.options[i];
         
-        btn.onclick = function() {
-            if (locked) return;
-            locked = true;
+        // btn.onclick = function() {
+            // if (locked) return;
+            // locked = true;
 
-            if (i === data.ans) {
-                btn.classList.add('correct');
-                score++;
-            } else {
-                btn.classList.add('incorrect');
+            // if (i === data.ans) {
+                // btn.classList.add('correct');
+               //  score++;
+          //   } else {
+               //  btn.classList.add('incorrect');
                 // Just grabbing the correct one by index directly
-                container.children[data.ans].classList.add('missed');
-            }
+         //        container.children[data.ans].classList.add('missed');
+        //     }
 
-            hintBox.innerText = data.hint;
-            hintBox.style.display = 'block';
-            nextBtn.style.display = 'block';
-        };
-        container.appendChild(btn);
-    }
-}
+        //     hintBox.innerText = data.hint;
+        //     hintBox.style.display = 'block';
+        //     nextBtn.style.display = 'block';
+     //    };
+     //    container.appendChild(btn);
+ //    }
+// }
 
 nextBtn.onclick = function() {
     currentQ++;
