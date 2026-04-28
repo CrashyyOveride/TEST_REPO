@@ -115,6 +115,10 @@
             <p>OPTIMISATION COMPLETE</p>
             <h1 style="font-size: 4rem; margin: 10px 0;">RANK: <span id="rank-text" style="color: var(--accent)">-</span></h1>
             <p id="performance-summary">Learning Centre Quiz Processed Successfully.</p>
+            <div id="dev-bio" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+            <p style="font-size: 0.7rem; color: var(--accent); letter-spacing: 2px;">DEVELOPED BY</p>
+            <h3 style="margin: 5px 0; font-weight: 300;">Tynan Kocet ;></h3>
+            <p style="font-size: 0.8rem; color: #888;">Software Engineering Student || Year 11 </p>
             <button onclick="location.reload()" class="btn-supreme">Reboot Session</button>
         </div>
     </div>
@@ -217,10 +221,9 @@ init();
 const audio = document.getElementById('bg-music');
 
 function startAmbiance() {
-    audio.volume = 0; // Start at zero for the fade-in
+    audio.volume = 0; 
     audio.play().catch(err => console.log("Audio waiting for user click."));
     
-    // Smoothly fade in to 30% volume
     let vol = 0;
     const fadeIn = setInterval(() => {
         if (vol < 0.3) { 
@@ -231,11 +234,9 @@ function startAmbiance() {
         }
     }, 200);
 
-    // Stop listening for clicks once music has started
     document.removeEventListener('click', startAmbiance);
 }
 
-// The music will start the moment you click ANYWHERE on the page
 document.addEventListener('click', startAmbiance);
     </script>
 </body>
